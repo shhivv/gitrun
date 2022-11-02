@@ -6,7 +6,7 @@
 
 Note: when building for the first time, it may take longer.
 
-**usage**
+**Usage**
 ```
 gitrun https://github.com/15Dkatz/official_joke_api
 ```
