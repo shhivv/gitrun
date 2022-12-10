@@ -1,6 +1,8 @@
 use anyhow::{self, bail, Ok};
+use colored::Colorize;
 use regex::Regex;
 use std::{fs, path::PathBuf, process::Command};
+use spinners::Spinner;
 
 pub fn clone(url: &str) -> anyhow::Result<(String, PathBuf)> {
     let base = std::env::var("UserProfile").unwrap_or_else(|_| "~".to_string());
@@ -21,10 +23,10 @@ pub fn clone(url: &str) -> anyhow::Result<(String, PathBuf)> {
         if let Some(name) = caps.get(7) {
             repo_name = name.as_str();
         } else {
-            bail!("URL is not a valid Git repository URL.")
+            bail!("Invalid Git repository URL".red())
         }
     } else {
-        bail!("URL is not a valid Git repository URL.")
+        bail!("Invalid Git repository URL".red())
     }
 
     let mut cloned_dir = gitrun_home;
@@ -34,13 +36,18 @@ pub fn clone(url: &str) -> anyhow::Result<(String, PathBuf)> {
         return Ok((repo_name.to_string(), cloned_dir));
     }
 
-    println!("Cloning repo...");
+    let mut sp = Spinner::new(
+        spinners::Spinners::Arc,
+        format!("{}",format!("{} {}","Cloning", url).blue()),
+    );
 
     Command::new("git")
         .arg("clone")
         .arg(url)
         .arg(&cloned_dir)
         .output()?;
+
+    sp.stop_with_message(format!("{}",format!("{} {}","Cloned", url).bright_blue()));
 
     Ok((repo_name.to_string(), cloned_dir))
 }
