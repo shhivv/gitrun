@@ -7,6 +7,9 @@
 Note: when building for the first time, it may take longer.
 
 **Installation**
+
+> **Note**: You need to have [`nixpacks`](https://nixpacks.com) and [`docker`](https://docker.com) installed.
+
 ```
 cargo install --git https://github.com/shhivv/gitrun
 ```
